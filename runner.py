@@ -1,12 +1,14 @@
 import pygame
-from checkers.constants import *
-from checkers.board import Board
-from checkers.game import Game
-#from AI_Algorithm.minimax import minimax
+from Logic.constants import *
+from Logic.board import Board
+from Logic.game import Game
+from Logic.utils import *
 import math,time
+from keras.models import load_model
 
 WIN=pygame.display.set_mode((WIDTH,HEIGHTL))     # Initialize the game window
 pygame.display.set_caption("CHECKERS")
+
 
 
 #Returns position(row,col) where mouse click is detected
@@ -15,6 +17,16 @@ def get_curr_mouse_pos(pos):
     row=y//SQ_SIZE
     col=x//SQ_SIZE
     return row,col
+
+# later this is fondamental to make it work
+def best_move(board):
+  reinforced_model = load_model('reinforced_model.h5')
+  boards = np.zeros((0, 32))
+  boards = generate_next(board)
+  scores = reinforced_model.predict_on_batch(boards)
+  max_index = np.argmax(scores)
+  best = boards[max_index]
+  return best
 
 
 def main():
@@ -28,8 +40,9 @@ def main():
         clock.tick(FPS)
 
         if game.turn==WHITE:
-            #value, new_board=minimax(game.get_board(),4,WHITE,game,-math.inf,math.inf)
-            #game.ai_move(WIN,new_board)
+            new_board= best_move(game.board)
+            
+            game.ai_move(WIN,new_board)
             print('AI moves',value)
 
         if game.winner(game)!=None:

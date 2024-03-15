@@ -1,5 +1,5 @@
 import pygame
-from .constants import *
+from constants import *
 
 
 # class to represent a piece on the board
@@ -17,7 +17,7 @@ class Pieces:
         self.y=0
         self.calc_pos() #call in every init to make the piece in the middle of square
 
-
+    # center the piece in the middle of the square
     def calc_pos(self):
 
         #place it its particular cell and then at center of the cell
@@ -28,6 +28,7 @@ class Pieces:
     def make_king(self):
         self.king=True
 
+    # draw the piece on the board
     def draw(self,win):
         
         radius = SQ_SIZE//2-self.PADDING
@@ -36,7 +37,7 @@ class Pieces:
         if self.king:   #put the crown in piece
             win.blit(CROWN,(self.x-CROWN.get_width()//2, self.y-CROWN.get_height()//2))
 
-    
+    # move the piece to a new row and column
     def move(self,row,col):
         self.row=row
         self.col=col

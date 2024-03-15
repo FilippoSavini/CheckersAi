@@ -1,6 +1,6 @@
 import pygame
-from .board import *
-from .constants import *
+from board import *
+from constants import *
 pygame.init()
 
 class Game:

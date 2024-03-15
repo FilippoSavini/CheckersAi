@@ -3,9 +3,9 @@ from keras.layers import Dense, Activation
 from keras import regularizers
 import numpy as np
 import matplotlib.pyplot as plt
-from .utils import get_metrics, get_all_moves
-from checkers.board import *
-from checkers.game import *
+import utils
+from board import *
+from game import *
 
 
 # Metrics model, which only looks at heuristic scoring metrics used for labeling
@@ -17,14 +17,14 @@ metrics_model.add(Dense(16, activation='relu',  kernel_regularizer=regularizers.
 metrics_model.add(Dense(1, activation='relu',  kernel_regularizer=regularizers.l2(0.1)))
 metrics_model.compile(optimizer='nadam', loss='binary_crossentropy', metrics=["acc"])
 
-start_board = Board()
-boards_list = Game.get_board()
+gmae = Game()
+start_board = gmae.get_board()
 branching_position = 0
 nmbr_generated_game = 10000
 while len(boards_list) < nmbr_generated_game:
 	temp = len(boards_list) - 1
 	for i in range(branching_position, len(boards_list)):
-		if (get_all_moves(boards_list[i]) > 0):
+		if (utils.get_all_moves(boards_list[i]) > 0):
 				boards_list = np.vstack((boards_list,  Game.get_board(boards_list[i])))
 	branching_position = temp
 
@@ -33,7 +33,7 @@ metrics	= np.zeros((0, 10))
 winning = np.zeros((0, 1))
 
 for board in boards_list[:nmbr_generated_game]:
-	temp = get_metrics(board)
+	temp = utils.get_metrics(board)
 	metrics = np.vstack((metrics, temp[1:]))
 	winning  = np.vstack((winning, temp[0]))
  

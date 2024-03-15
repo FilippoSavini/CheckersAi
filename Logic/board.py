@@ -1,6 +1,6 @@
 import pygame
-from .constants import *
-from .pieces import *
+from constants import *
+from pieces import *
 #from AI_Algorithm.minimax import get_all_moves
 
 
@@ -88,10 +88,10 @@ class Board:
         elif self.white_left<=0:  
             return BLACK 
            
-        # red_moves = get_all_moves(self, BLACK,game)
-        # white_moves = get_all_moves(self, WHITE,game)
-        # if len(red_moves) == 0 or len(white_moves) == 0:
-        #     return TIE
+        black_moves = self.get_all_moves(self, BLACK,game)
+        white_moves = self.get_all_moves(self, WHITE,game)
+        if len(black_moves) == 0 or len(white_moves) == 0:
+            return TIE
 
         return None    
 
@@ -111,7 +111,7 @@ class Board:
             moves.update(self._traverse_left(row+1,min(row+3,ROWS),1,piece.color,left))
             moves.update(self._traverse_right(row+1,min(row+3,ROWS),1,piece.color,right))
 
-        return moves
+        return moves # dict of moves the piece is the key and the moves are a list of new possible positions
 
     # method to handle diagonal moves to the left
     def _traverse_left(self,start,stop,step,color,left,skipped=[]):
@@ -219,3 +219,13 @@ class Board:
                 if piece!=0 and piece.color==color: 
                     pieces.append(piece)
         return pieces
+    
+    # # method to retrive all valid moves for a given color
+    # def get_all_moves(self, color, game):
+    #     moves = {}
+    #     for piece in self.get_all_pieces(color):
+    #         valid_moves = self.get_valid_moves(piece)
+    #         for move, skip in valid_moves.items():
+    #             if skip:
+    #                 moves[move] = skip
+    #     return moves

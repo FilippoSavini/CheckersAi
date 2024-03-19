@@ -8,7 +8,7 @@ class Pieces:
     PADDING = 15   #size of circle piece
     OUTLINE = 2    #outline of circle
 
-    def __init__(self,row,col,color):
+    def __init__(self,row,col,color, king=False):
         self.row=row
         self.col=col
         self.color=color

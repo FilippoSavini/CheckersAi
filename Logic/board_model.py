@@ -31,8 +31,9 @@ while len(boards_list) < nmbr_generated_game:
 metrics	= np.zeros((0, 10))
 winning = np.zeros((0, 1))
 
+
 for board in boards_list[:nmbr_generated_game]:
-	temp = utils.get_metrics(board)
+	temp = utils.get_metrics(utils.expand(board))
 	metrics = np.vstack((metrics, temp[1:]))
 	winning  = np.vstack((winning, temp[0]))
  
@@ -41,20 +42,20 @@ history = metrics_model.fit(metrics , winning, epochs=32, batch_size=64, verbose
 
 # History for accuracy
 plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
+#plt.plot(history.history['val_acc'])
 plt.title('model accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('epoch')
-plt.legend(['train', 'validation'], loc='upper left')
+plt.legend(['train'], loc='upper left')
 plt.show()
 
 # History for loss
 plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
+#plt.plot(history.history['val_loss'])
 plt.title('model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
-plt.legend(['train', 'validation'], loc='upper left')
+plt.legend(['train'], loc='upper left')
 plt.show()
 
 # Board model
@@ -78,10 +79,10 @@ winning = np.zeros((0, 1))
 data = boards_list
 
 for board in data:
-	temp = utils.get_metrics(board)
+	temp = utils.get_metrics(utils.expand(board))
 	metrics = np.vstack((metrics, temp[1:]))
-	winning = np.zeros((0, 1))
- 
+	winning  = np.vstack((winning, temp[0]))
+
 # calculate probilistic (noisy) labels
 probabilistic = metrics_model.predict_on_batch(metrics)
 
@@ -90,7 +91,7 @@ probabilistic = np.sign(probabilistic)
 
 # calculate confidence score for each probabilistic label using error between probabilistic and weak label
 confidence = 1/(1 + np.absolute(winning - probabilistic[:, 0]))
- 
+
 # pass to the Board model
 board_model.fit(data, probabilistic, epochs=32, batch_size=64, sample_weight=confidence, verbose=0)
 

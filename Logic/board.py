@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 from pieces import *
+import numpy as np
 #from AI_Algorithm.minimax import get_all_moves
 
 
@@ -44,6 +45,11 @@ class Board:
     def get_piece(self,row,col):
         return self.board[row][col]
 
+    def create_blank_board(self):
+        self.board = []
+        for row in range(ROWS):
+            self.board.append([])
+                
     # method to set up the board with pieces in their initial positions
     def create_board(self):
         
@@ -179,38 +185,7 @@ class Board:
 
         return moves
     
-    # # method to compute a score
-    # # may require to be modified to fit the needs of the AI
-    # def evaluate(self,game):
-    #     # Piece count
-    #     mainScore= self.white_left - self.black_left + (self.white_kings * 0.5 - self.black_kings * 0.5)
-
-    #     # King safety
-    #     white_attacks = 0
-    #     red_attacks = 0
-    #     for row in range(ROWS):
-    #         for col in range(COLS):
-    #             piece = self.board[row][col]
-    #             if piece == WHITE:
-    #                 if self.is_king(piece):
-    #                     if self.is_under_attack(row, col, BLACK):
-    #                         white_attacks += 1
-    #                 else:
-    #                     if self.is_under_attack(row, col, BLACK):
-    #                         white_attacks += 0.5
-    #             elif piece == BLACK:
-    #                 if self.is_king(piece):
-    #                     if self.is_under_attack(row, col, WHITE):
-    #                         red_attacks += 1
-    #                 else:
-    #                     if self.is_under_attack(row, col, WHITE):
-    #                         red_attacks += 0.5
-    #     safety = red_attacks - white_attacks
-
-    #     # Calculate the final score
-    #     score = mainScore  + safety
-    #     return score
-
+   
     # method to retrive all pieces of a given color
     def get_all_pieces(self,color):
         pieces = [] 
@@ -229,3 +204,4 @@ class Board:
     #             if skip:
     #                 moves[move] = skip
     #     return moves
+    
